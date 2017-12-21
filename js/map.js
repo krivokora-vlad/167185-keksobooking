@@ -107,13 +107,13 @@ function renderOffer(offerPopup) {
   var offerElement = offerTemplate.querySelector('article.map__card').cloneNode(true);
 
   var title = offerElement.querySelector('h3');
-  var address = title.nextElementSibling.firstElementChild;
+  var address = offerElement.querySelector('h3+p small');
   var price = offerElement.querySelector('.popup__price');
   var type = offerElement.querySelector('h4');
-  var roomsAndGuests = type.nextElementSibling;
-  var checkInCheckout = roomsAndGuests.nextElementSibling;
+  var roomsAndGuests = offerElement.querySelector('h4+p');
+  var checkInCheckout = offerElement.querySelector('p:nth-of-type(4)');
   var popupFeatures = offerElement.querySelector('.popup__features');
-  var description = popupFeatures.nextElementSibling;
+  var description = offerElement.querySelector('.popup__features+p');
   var avatar = offerElement.querySelector('.popup__avatar');
 
   title.innerText = offerPopup.offer.title;
