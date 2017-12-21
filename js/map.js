@@ -16,8 +16,9 @@
     window.pin.renderMapElements(window.data.offers);
     document.querySelector('.map__pin--main').classList.add('hidden');
   }
-  document.querySelector('.map__pin--main').addEventListener('mouseup', function () {
-    mapInit();
-  });
+
+  window.map = {
+    mapInit: mapInit
+  };
 
 })();
