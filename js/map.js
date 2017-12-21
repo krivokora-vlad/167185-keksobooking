@@ -1,5 +1,8 @@
 'use strict';
 
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
+
 var offersTitles = [
   'Большая уютная квартира',
   'Маленькая неуютная квартира',
@@ -77,32 +80,35 @@ function fillOffers(items) {
   }
 }
 
-fillOffers(8);
 
-var map = document.querySelector('.map');
-map.classList.remove('map--faded');
+function mapPinActive(elements, isActive) {
+  var i = 0;
+  for (i = 0; i < elements.length; i++) {
+    if (isActive) {
+      elements[i].classList.add('map__pin--active');
+    } else {
+      elements[i].classList.remove('map__pin--active');
+    }
+  }
+}
 
 var mapPins = document.querySelector('.map__pins');
 
-function renderMapElements(offersList) {
-  var fragment = document.createDocumentFragment();
+function onPopupEscPress(e) {
+  if (e.keyCode === ESC_KEYCODE) {
+    mapPinActive(document.querySelectorAll('.map__pin.map__pin--active'), false);
+    document.querySelector('.map__card.popup').classList.add('hidden');
+  }
+}
+ 
+function renderOffer(offerPopup) {
+
+  var popups = document.querySelectorAll('.map__card.popup');
   var i;
-  for (i = 0; i < offersList.length; i++) {
-    var offer = offersList[i];
-    var marker = document.createElement('button');
-    marker.style.left = offer.location.x - 4 + 'px';
-    marker.style.top = offer.location.y - 40 + 'px';
-    marker.className = 'map__pin';
-    marker.innerHTML = '<img src="' + offer.author.avatar + '" width="40" height="40" draggable="false">';
-    fragment.appendChild(marker);
+  for (i = 0; i < popups.length; i++) {
+    popups[i].remove();
   }
 
-  mapPins.appendChild(fragment);
-}
-
-renderMapElements(offers);
-
-function renderOffer(offerPopup) {
   var offerTemplate = document.querySelector('template').content;
   var offerElement = offerTemplate.querySelector('article.map__card').cloneNode(true);
 
@@ -141,6 +147,70 @@ function renderOffer(offerPopup) {
   avatar.src = offerPopup.author.avatar;
 
   mapPins.insertAdjacentHTML('afterend', offerElement.outerHTML);
+
+  document.querySelector('.popup__close').addEventListener('click', function () {
+    mapPinActive(document.querySelectorAll('.map__pin.map__pin--active'), false);
+    document.querySelector('.map__card.popup').classList.add('hidden');
+    document.removeEventListener('keydown', onPopupEscPress);
+  });
+
+  document.addEventListener('keydown', onPopupEscPress);
+
 }
 
-renderOffer(offers[0]);
+function pinBind(marker, offer) {
+  marker.addEventListener('click', function () {
+    mapPinActive(document.querySelectorAll('.map__pin.map__pin--active'), false);
+    mapPinActive([marker], true);
+    renderOffer(offer);
+  });
+  marker.addEventListener('keydown', function(evt) {
+    if (evt.keyCode === ENTER_KEYCODE) {
+      mapPinActive(document.querySelectorAll('.map__pin.map__pin--active'), false);
+      mapPinActive([marker], true);
+      renderOffer(offer);
+    }
+  });
+};
+
+function renderMapElements(offersList) {
+  var fragment = document.createDocumentFragment();
+  var i;
+  for (i = 0; i < offersList.length; i++) {
+    var offer = offersList[i];
+    var marker = document.createElement('button');
+    marker.style.left = offer.location.x - 4 + 'px';
+    marker.style.top = offer.location.y - 40 + 'px';
+    marker.className = 'map__pin';
+    marker.innerHTML = '<img src="' + offer.author.avatar + '" width="40" height="40" draggable="false">';
+
+    pinBind(marker, offer);
+
+    fragment.appendChild(marker);
+  }
+
+  mapPins.appendChild(fragment);
+}
+
+function disableForm(isDisable) {
+  var form = document.querySelector('form.notice__form');
+  var formFieldsets = form.querySelectorAll('fieldset');
+  var i;
+  for (i = 0; i < formFieldsets.length; i++) {
+    formFieldsets[i].disabled = isDisable;
+  }
+}
+disableForm(true);
+
+function mapInit() {
+  var map = document.querySelector('.map');
+  map.classList.remove('map--faded');
+  disableForm(false);
+  fillOffers(8);
+  renderMapElements(offers);
+  document.querySelector('.map__pin--main').classList.add('hidden');
+}
+document.querySelector('.map__pin--main').addEventListener('mouseup', function () {
+  mapInit();
+});
+
