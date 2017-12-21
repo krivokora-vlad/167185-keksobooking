@@ -80,7 +80,6 @@ function fillOffers(items) {
   }
 }
 
-
 function mapPinActive(elements, isActive) {
   var i = 0;
   for (i = 0; i < elements.length; i++) {
@@ -100,7 +99,7 @@ function onPopupEscPress(e) {
     document.querySelector('.map__card.popup').classList.add('hidden');
   }
 }
- 
+
 function renderOffer(offerPopup) {
 
   var popups = document.querySelectorAll('.map__card.popup');
@@ -131,7 +130,6 @@ function renderOffer(offerPopup) {
 
   var fragment = document.createDocumentFragment();
 
-  var i;
   for (i = 0; i < offerPopup.offer.features.length; i++) {
     var featureElement = document.createElement('li');
     featureElement.classList.add('feature');
@@ -164,14 +162,14 @@ function pinBind(marker, offer) {
     mapPinActive([marker], true);
     renderOffer(offer);
   });
-  marker.addEventListener('keydown', function(evt) {
+  marker.addEventListener('keydown', function (evt) {
     if (evt.keyCode === ENTER_KEYCODE) {
       mapPinActive(document.querySelectorAll('.map__pin.map__pin--active'), false);
       mapPinActive([marker], true);
       renderOffer(offer);
     }
   });
-};
+}
 
 function renderMapElements(offersList) {
   var fragment = document.createDocumentFragment();
@@ -213,4 +211,3 @@ function mapInit() {
 document.querySelector('.map__pin--main').addEventListener('mouseup', function () {
   mapInit();
 });
-
