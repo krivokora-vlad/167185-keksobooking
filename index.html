@@ -14,6 +14,8 @@
 
 <main>
   <section class="map map--faded">
+    
+    
     <div class="map__pins">
       <div class="map__pinsoverlay"><h2>И снова Токио!</h2></div>
 
@@ -29,6 +31,8 @@
         </svg>
       </button>
     </div>
+
+
 
     <div class="map__filters-container">
       <form action="#" class="map__filters" autocomplete="off">
@@ -80,6 +84,7 @@
          </fieldset>
       </form>
     </div>
+
   </section>
 
   <div class="notice">
@@ -218,7 +223,8 @@
   </div>
 </footer>
 
-<template>
+
+<template id="main-template">
   <article class="map__card popup">
     <img src="img/avatars/user01.png" class="popup__avatar" width="70" height="70">
     <button class="popup__close">Закрыть</button>
@@ -244,6 +250,10 @@
 
   <button style="left: 200px; top: 400px;" class="map__pin"><img src="img/avatars/user07.png" width="40" height="40" draggable="false"></button>
 </template>
+
+
+
+<script src="js/map.js"></script>
 
 </body>
 </html>
