@@ -31,6 +31,8 @@
     'bungalo': 'Бунгало',
   };
 
+  var checkOnOutTime = ['12:00', '13:00', '14:00'];
+
   function getRandomInteger(min, max) {
     return (Math.random() * (max - min) + min).toFixed(0);
   }
@@ -94,7 +96,8 @@
     fillOffers: fillOffers,
     offers: offers,
     appartType: appartType,
-    KEYCODE: KEYCODE
+    KEYCODE: KEYCODE,
+    checkOnOutTime: checkOnOutTime
   };
 
 })();

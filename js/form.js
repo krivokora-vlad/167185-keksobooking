@@ -53,57 +53,13 @@
   address.readOnly = true;
 
   // Form field sync
-  timein.addEventListener('change', function (e) {
-    timeout.value = e.target.value;
-  });
-  timeout.addEventListener('change', function (e) {
-    timein.value = e.target.value;
-  });
 
-  type.addEventListener('change', function (e) {
-    switch (e.target.value) {
-      case ('flat'):
-        price.min = 0; break;
-      case ('bungalo'):
-        price.min = 1000; break;
-      case ('house'):
-        price.min = 5000; break;
-      case ('palace'):
-        price.min = 10000; break;
-      default:
-        price.min = 0;
-    }
-  });
 
-  function allowedRooms(cap) {
-    var capacityOptions = capacity.querySelectorAll('option');
-    var i;
-    for (i = 0; i < capacityOptions.length; i++) {
-      capacityOptions[i].selected = false;
-      if (cap.indexOf(parseInt(capacityOptions[i].value, 10)) >= 0) {
-        capacityOptions[i].disabled = false;
-      } else {
-        capacityOptions[i].disabled = true;
-      }
-    }
-    capacity.value = cap[0];
-  }
+  window.syncFields.synchronizeFields(timein, timeout, window.data.checkOnOutTime, window.data.checkOnOutTime, window.syncFields.syncValues);
+  window.syncFields.synchronizeFields(timeout, timein, window.data.checkOnOutTime, window.data.checkOnOutTime, window.syncFields.syncValues);
+  window.syncFields.synchronizeFields(type, price, ['flat', 'bungalo', 'house', 'palace'], [0, 1000, 5000, 10000], window.syncFields.syncValueWithMin);
+  window.syncFields.synchronizeFields(roomNumber, capacity, ['1', '2', '3', '100'], [[1], [1, 2], [1, 2, 3], [0]], window.syncFields.allowedOptions);
 
-  roomNumber.addEventListener('change', function (e) {
-    switch (e.target.value) {
-      case ('1'):
-        allowedRooms([1]); break;
-      case ('2'):
-        allowedRooms([1, 2]); break;
-      case ('3'):
-        allowedRooms([1, 2, 3]); break;
-      case ('100'):
-        allowedRooms([0]); break;
-      default:
-        allowedRooms([0]); break;
-    }
-  });
-  allowedRooms([1]);
 
   function disableForm(isDisable) {
     var formFieldsets = form.querySelectorAll('fieldset');
