@@ -24,37 +24,58 @@
     }
   }
 
+  function clearForm() {
+    form.reset();
+  }
+
+  function errorHandle(message) {
+    var el = document.createElement('DIV');
+    el.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red; color: white; font-size: 20px; position: fixed; left: 0; top: 0; width: 100%; padding: 10px;';
+    el.textContent = 'Ошибка отправки формы: ' + message;
+    document.body.insertAdjacentElement('afterbegin', el);
+  }
+
   // Validation
-  document.querySelector('form.notice__form').addEventListener('submit', function (e) {
+  form.addEventListener('submit', function (e) {
+
     e.preventDefault();
+
+    var errors = [];
 
     if (address.value === '') {
       invalidInput(address, true);
+      errors.push(['address', 'Поле обязательно для заполенения']);
     } else {
       invalidInput(address, false);
     }
 
     if (title.value.length < 30 || title.value.length > 100) {
       invalidInput(title, true);
+      errors.push(['title', 'Заголовок должен быть не менее 30 знаков, но и не более 100']);
     } else {
       invalidInput(title, false);
     }
 
-    if (parseInt(price.value, 10) < 0 || parseInt(price.value, 10) > 1000000) {
+    if (parseInt(price.value, 10) < price.min || parseInt(price.value, 10) > 1000000) {
       invalidInput(price, true);
+      errors.push(['price', 'Цена не должна быть меньше ' + price.min + ' или больше ' + 1000000]);
     } else {
       invalidInput(price, false);
-      if (parseInt(price.value, 10) === 0 || isNaN(parseInt(price.value, 10))) {
+      if (parseInt(price.value, 10) < price.min || isNaN(parseInt(price.value, 10))) {
         price.value = 1000;
       }
     }
+
+    if (errors.length === 0) {
+      window.backend.send(new FormData(form), clearForm, errorHandle);
+    }
+
+
   });
 
   address.readOnly = true;
 
   // Form field sync
-
-
   window.syncFields.synchronizeFields(timein, timeout, window.data.checkOnOutTime, window.data.checkOnOutTime, window.syncFields.syncValues);
   window.syncFields.synchronizeFields(timeout, timein, window.data.checkOnOutTime, window.data.checkOnOutTime, window.syncFields.syncValues);
   window.syncFields.synchronizeFields(type, price, ['flat', 'bungalo', 'house', 'palace'], [0, 1000, 5000, 10000], window.syncFields.syncValueWithMin);
