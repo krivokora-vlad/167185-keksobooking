@@ -12,7 +12,7 @@
     var map = document.querySelector('.map');
     map.classList.remove('map--faded');
     window.form.disableForm(false);
-    window.data.fillOffers(8);
+    window.data.getOffersFromServer();
     window.pin.renderMapElements(window.data.offers);
     document.querySelector('.map__pin--main').classList.add('hidden');
   }
