@@ -8,14 +8,16 @@
 (function () {
 
   var URL = 'https://js.dump.academy/keksobooking';
+  var TIMEOUT = 4000;
+  var HTTP_CODE_SUCCESS = 200;
 
   function init(onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
-    xhr.timeout = 4000;
+    xhr.timeout = TIMEOUT;
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === HTTP_CODE_SUCCESS) {
         onSuccess(xhr.response);
       } else {
         onError('Error ' + xhr.status);

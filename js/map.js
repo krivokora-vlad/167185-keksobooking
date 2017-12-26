@@ -8,17 +8,22 @@
 
 (function () {
 
-  function mapInit() {
-    var map = document.querySelector('.map');
-    map.classList.remove('map--faded');
-    window.form.disableForm(false);
-    window.data.getOffersFromServer();
-    window.pin.renderMapElements(window.data.offers);
-    document.querySelector('.map__pin--main').classList.add('hidden');
+  var mapInited = false;
+
+  function init() {
+    if (!mapInited) {
+      var map = document.querySelector('.map');
+      map.classList.remove('map--faded');
+      window.form.disable(false);
+      window.data.getOffersFromServer(function () {
+        window.pin.renderMapElements(window.data.offers);
+      });
+      mapInited = true;
+    }
   }
 
   window.map = {
-    mapInit: mapInit
+    init: init
   };
 
 })();
