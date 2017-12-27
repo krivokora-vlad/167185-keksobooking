@@ -9,7 +9,7 @@
   function renderOffer(data, offerElement) {
     var title = offerElement.querySelector('h3');
     var address = offerElement.querySelector('h3+p small');
-    var price = offerElement.querySelector('.popup__price');
+    var price = offerElement.querySelector('.popup__price-val');
     var type = offerElement.querySelector('h4');
     var roomsAndGuests = offerElement.querySelector('h4+p');
     var checkInCheckout = offerElement.querySelector('p:nth-of-type(4)');
@@ -19,7 +19,7 @@
 
     title.textContent = data.offer.title;
     address.textContent = data.offer.address;
-    price.innerHTML = data.offer.price + '&#x20bd;/ночь';
+    price.textContent = data.offer.price;
     type.textContent = window.data.appartType[data.offer.type];
     roomsAndGuests.textContent = data.offer.rooms + ' комнаты для ' + data.offer.guests + ' гостей';
     checkInCheckout.textContent = 'Заезд после ' + data.offer.checkin + ', выезд до ' + data.offer.checkout;
@@ -33,13 +33,9 @@
     }
     popupFeatures.innerHTML = '';
     popupFeatures.appendChild(fragment);
-
     description.textContent = data.offer.description;
-
     avatar.src = data.author.avatar;
-
     return offerElement.innerHTML;
-
   }
 
   window.card = {

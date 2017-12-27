@@ -41,16 +41,14 @@
   function onPinBind(marker, offer) {
     makeActive(document.querySelectorAll('.map__pin.map__pin--active'), false);
     makeActive(marker, true);
-    window.showCard.hideCard();
-    window.showCard.show(offer);
+    window.cardModule.hide();
+    window.cardModule.show(offer);
   }
 
   function pinBind(marker, offer) {
-
     marker.addEventListener('click', function () {
       onPinBind([marker], offer);
     });
-
   }
 
   function renderMapElements(offersList) {
@@ -92,26 +90,21 @@
       };
 
       markerCoords = {
-        x: mainPin.offsetLeft,
-        y: mainPin.offsetTop
+        x: mainPin.offsetLeft - shift.x,
+        y: mainPin.offsetTop - shift.y,
       };
 
-      mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
-      mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+      /*
+        устранена рваность перемещений маркера
+        устранена возможность вылета на пиксель-два за границы
+      */
+      markerCoords.x = (markerCoords.x < MARKER_POSITION_MIN_X) ? MARKER_POSITION_MIN_X : markerCoords.x;
+      markerCoords.x = (markerCoords.x > MARKER_POSITION_MAX_X) ? MARKER_POSITION_MAX_X : markerCoords.x;
+      markerCoords.y = (markerCoords.y < MARKER_POSITION_MIN_Y - MAIN_PIN_TOP_OFFSET) ? MARKER_POSITION_MIN_Y - MAIN_PIN_TOP_OFFSET : markerCoords.y;
+      markerCoords.y = (markerCoords.y > MARKER_POSITION_MAX_Y - MAIN_PIN_TOP_OFFSET) ? MARKER_POSITION_MAX_Y - MAIN_PIN_TOP_OFFSET : markerCoords.y;
 
-      if (markerCoords.x < MARKER_POSITION_MIN_X) {
-        mainPin.style.left = MARKER_POSITION_MIN_X + 'px';
-      }
-      if (markerCoords.x > MARKER_POSITION_MAX_X) {
-        mainPin.style.left = MARKER_POSITION_MAX_X + 'px';
-      }
-
-      if (markerCoords.y < MARKER_POSITION_MIN_Y) {
-        mainPin.style.top = MARKER_POSITION_MIN_Y + 'px';
-      }
-      if (markerCoords.y > MARKER_POSITION_MAX_Y) {
-        mainPin.style.top = MARKER_POSITION_MAX_Y + 'px';
-      }
+      mainPin.style.left = markerCoords.x + 'px';
+      mainPin.style.top = markerCoords.y + 'px';
 
     };
 
@@ -119,7 +112,7 @@
       upEvt.preventDefault();
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
-      document.getElementById('address').value = parseInt(mainPin.style.left, PARSE_INT_RADIX) + ', ' + (parseInt(mainPin.style.top, PARSE_INT_RADIX) + MAIN_PIN_TOP_OFFSET);
+      document.getElementById('address').value = parseInt(mainPin.offsetLeft, PARSE_INT_RADIX) + ', ' + (parseInt(mainPin.offsetTop, PARSE_INT_RADIX) + MAIN_PIN_TOP_OFFSET);
       window.map.init();
     };
 
@@ -129,7 +122,7 @@
 
   function removePins() {
     var pinElements = mapPins.querySelectorAll('.map__pin:not(.map__pin--main)');
-    window.showCard.hideCard();
+    window.cardModule.hide();
     pinElements.forEach(function (pin) {
       pin.remove();
     });

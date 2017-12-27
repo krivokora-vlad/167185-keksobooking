@@ -9,14 +9,14 @@
   var OFFER_TEMPLATE = document.querySelector('template').content;
 
   // функция скрытия карточки объявления
-  function hideCard() {
+  function hide() {
     var popups = document.querySelectorAll('.map__card.popup');
 
     // удалить элементы карточки из дома и оторвать повешенные бинды от вложенных элементов
     for (var i = 0; i < popups.length; i++) {
       var popup = popups[i];
       var closeButton = popup.querySelector('.popup__close');
-      closeButton.removeEventListener('click', hideCard);
+      closeButton.removeEventListener('click', hide);
       closeButton.removeEventListener('keydown', onClosePressEnter);
       popup.remove();
     }
@@ -29,14 +29,14 @@
   // функция, реагирующая на ESC, пока объявление открыто
   function onPressEsc(keyDownEvt) {
     if (keyDownEvt.keyCode === window.data.KEYCODES['ESC']) {
-      hideCard();
+      hide();
     }
   }
 
   // функция, реагирующая на ENTER, если в фокусе кнопка закрытия карточки объявления
   function onClosePressEnter(keyDownEvt) {
     if (document.activeElement === keyDownEvt.target && keyDownEvt.keyCode === window.data.KEYCODES['ENTER']) {
-      hideCard();
+      hide();
     }
   }
 
@@ -55,15 +55,16 @@
     var closeButton = document.querySelector('.popup__close');
 
     // повесить бинды
-    closeButton.addEventListener('click', hideCard);
+    closeButton.addEventListener('click', hide);
     document.addEventListener('keydown', onPressEsc);
     closeButton.addEventListener('keydown', onClosePressEnter);
 
   }
 
-  window.showCard = {
+  // Название Card занято
+  window.cardModule = {
     show: show,
-    hideCard: hideCard
+    hide: hide
   };
 
 })();
