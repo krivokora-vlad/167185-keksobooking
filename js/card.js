@@ -33,13 +33,9 @@
     }
     popupFeatures.innerHTML = '';
     popupFeatures.appendChild(fragment);
-
     description.textContent = data.offer.description;
-
     avatar.src = data.author.avatar;
-
     return offerElement.innerHTML;
-
   }
 
   window.card = {
