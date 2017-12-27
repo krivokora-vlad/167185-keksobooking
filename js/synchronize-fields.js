@@ -19,19 +19,7 @@
 
     var options = element.querySelectorAll('option');
     for (var i = 0; i < options.length; i++) {
-
-      /*
-      предложенный вариант не подошёл, так как indexOf возвращает не булевое значение,
-      а индекс найденного элемента:
-      для первого элемента - будет 0 (false)
-      если элемент не найден - будет -1 (true)
-      */
-      if (allowedOptions.indexOf(parseInt(options[i].value, 10)) >= 0) {
-        options[i].disabled = false;
-      } else {
-        options[i].disabled = true;
-      }
-
+      options[i].disabled = allowedOptions.indexOf(parseInt(options[i].value, 10)) === -1;
     }
     element.value = allowedOptions[0];
   }
